@@ -1,0 +1,23 @@
+<6팀 런더월드>
+
+1. 제목 
+ 흉부 방사선 검사 영상을 학습한 데이터 기반으로 입력 영상에서 특징 추출하여 폐렴을 추출한다
+
+2. 목표 
+1) 다양한 CNN 모델을 이해한다 
+2) 성능을 올리기 위해 옵티마이저,  중요 하이퍼 파라미터를 이해한다.
+
+3. 진행 과정 
+
+1) 이미지 전처리 (transform : resize만 했을때) 
+  (1) 데이터 불러오기 
+  (2) 이미지 전처리(resize만 했을때) 
+  (3) 모델(럭키경영:Alexnet, 교보혜리:VGG, 구글재희:googlnet, 람보보람:Resnet)
+  (4)  batch_size,optimizer,Ir,epoch(각자설정) -> 과적합 발생한 모델 발생, test f1 socre 상대적으로 높은 모델들을 다시 선택!!!)
+
+2) 이미지 전처리(transform : 다양한 파라미터 설정함) 
+-> 이미지 전처리(resize, centercrop,normalize, RandomBrightnessContrast, Blur, CenterCrop, RandomHoriZontalFlip)설정
+-> 모델(VGG16, EfficientNet_b0,Resnet152)
+-> batch_size(,optimizer(Adam,Adam(weight decay=0.001),SGD) ,Ir,epoch -> 
+
+

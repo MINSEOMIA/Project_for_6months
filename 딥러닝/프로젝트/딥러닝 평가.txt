@@ -1,0 +1,75 @@
+제목 : Chest X-Ray Images (Pneumonia)
+설명 : 흉부 엑스선 이미지를 기반으로 정상인지 폐렴인지를 판단
+링크 : https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia
+문제 유형 : 이진 분류
+성능 측정 : F1 Score
+
+제목 : Plant Pathology 2020 - FGVC7
+설명 : 잎사귀 사진을 보고 잎사귀가 어떤 질병에 걸렸는지 식별
+링크 : https://www.kaggle.com/competitions/plant-pathology-2020-fgvc7
+문제 유형 : 다중 분류
+성능 측정 : ROC AUC
+
+제목 : Facial Keypoints Detection
+설명 : 얼굴의 특징점(keypoints) 예측
+링크 : https://www.kaggle.com/competitions/facial-keypoints-detection/
+문제 유형 : 수치 예측
+성능 측정 : RMSE
+
+
+1. 위에 설명된 3가지 문제 중 한가지만 선택하여 
+2. 딥러닝 예측 모델 만들기(아래의 내용이 포함되어야함) 
+1) 데이터 준비과정
+(0) 시각화(특성추출은 하기 때문에 안해도 된다)/ (데이터 증강전과 후)
+(1) 훈련/검증/테스트 데이터 분리
+(2) 데이터셋 클래스 정의(자체 제공, 나만의 데이터셋)
+(3) 이미지 변환기(torchvision, albumentation, 나만의 전처리기)
+(4) 데이터셋 생성/ 데이터로더 생성
+
+2) 모델 생성
+(1) CNN 모델을 만들기 or 성능이 좋은 모델의 weight를 다운 받기
+(2) 손실함수, 옵티마이저, 학습률, 학습 스케쥴러
+
+3) 모델 훈련 및 성능 검증
+
+4) 예측 및 제출(평가 받을수 있음)
+
+5) 성능 개선 과정에 대한 질문 
+	q1) 어떤 옵티마이저, 로스 함수를 사용했는지?
+	q2) 처음 시도했던 Network Architecture는 어떤 종류인지?
+	q3) 이후 시도해봤던 Network들은 무엇인지?
+	q4) 과대적합을 피하기 위해 했던 작업들은 무엇인지?
+	q5) 중요 하이퍼파리미터(batch size, epoch수, learning rate)은 어떻게 결정했는지?
+
+
+tensor (ch * h * w)
+numpy (h * w * c)
+opencv (x(수평방향), y(수직방향))
+
+1. 데이터 전처리 하지 않고 vgg, Resnet, Alexnet, googlenet 돌렸더니
+<경영> - Alexnet
+Test Loss :  1.002411757865394
+Accuracy :  0.768253976863528
+<혜리> - vgg
+Test Loss :  1.1492633829040222
+Accuracy :  0.7788461538461539
+<재희> - googlenet
+loss: 0.0552 - accuracy: 0.9789 
+val_loss: 0.4839 - val_accuracy: 0.8125
+<보람> - Resnet(val 10% 로 뺀 결과 )
+[tess loss1.1783792972564697, 
+accuacy 0.8044871687889099]
+
+
+2. 데이터 전처리를 해보자!
+1) 데이터 불러올때 비율 0%
+2) 그레이로 변경하고 
+3) 폐사진에서 음영을 조절해보는것...
+4) 폐만 확대(open cv로) -> 함수안에 넣어서 어떻게 저떻게 해봅시다 
+5) 
+
+kaggle
+1-8번 : 경영님
+2-7번 : 보람님
+3-6번 : 재희님
+4-5번 : 혜리님
