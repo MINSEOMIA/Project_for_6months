@@ -1,0 +1,136 @@
+package board;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import conn.MysqlConnect;
+import member.Member;
+
+public class Dao {
+	private MysqlConnect dbconn;
+
+	public Dao() {
+		dbconn = MysqlConnect.getInstance();
+	}
+
+	public void insert(Board b) {
+		Connection conn = dbconn.getConn();
+		String sql = "insert into board(writer,title,w_date,content) values(?,?,now(),?)";
+
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, b.getWriter());
+			pstmt.setString(2, b.getTitle());
+			pstmt.setString(3, b.getContent());
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public ArrayList<Board> selectAll() {
+		ArrayList<Board> list = new ArrayList<Board>();
+		ResultSet rs = null;
+		Connection conn = dbconn.getConn();
+		String sql = "select * from board order by num desc";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();// 검색한 결과를 ResultSet으로 반환
+			while (rs.next()) {
+				list.add(new Board(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5)));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
+	
+	public Board select(int num) {
+		Board b = null;
+		ResultSet rs = null;
+		Connection conn = dbconn.getConn();
+		String sql = "select * from board where num=?";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();// 검색한 결과를 ResultSet으로 반환
+			if (rs.next()) {
+				b = new Board(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getString(5));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return b;
+	}
+	
+	public void update(Board b) {
+		Connection conn = dbconn.getConn();
+		String sql = "update board set title=?, content=? where num=?";
+
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);		
+			pstmt.setString(1, b.getTitle());
+			pstmt.setString(2, b.getContent());
+			pstmt.setInt(3, b.getNum());
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void delete(int num) {
+		Connection conn = dbconn.getConn();
+		String sql = "delete from board where num=?";
+
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}

@@ -1,0 +1,33 @@
+package board;
+
+import java.util.ArrayList;
+
+public class Service {
+	private Dao dao;
+	
+	public Service() {
+		dao = new Dao();
+	}
+	
+	//글작성
+	public void addBoard(Board b) {
+		dao.insert(b);
+	}
+	
+	//글목록
+	public ArrayList<Board> getAll(){
+		return dao.selectAll();
+	}
+	//글 번호로 검색
+	public Board getBoard(int num) {
+		return dao.select(num);
+	}
+	//수정
+	public void editBoard(Board b) {
+		dao.update(b);
+	}
+	//삭제
+	public void delBoard(int num) {
+		dao.delete(num);
+	}
+}

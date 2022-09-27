@@ -1,0 +1,32 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+const a = () => {
+	//open(): 새창 열어줌. param1:이창에 띄울 웹 페이지. param2:창이름. param3:속성
+	let win = open("check.jsp", "win", "height=400,width=400,resizable=yes");
+}
+</script>
+</head>
+<body>
+<h3>회원가입</h3>
+<form action="/aaa/member/JoinController" method="post" name="f1">
+<table style="border:solid 1px black">
+<tr><th>id</th>
+	<td>
+		<input type="text" name="id">
+		<input type="button" value="중복체크" onclick="a()">
+	</td>
+</tr>
+<tr><th>pwd</th><td><input type="password" name="pwd"></td></tr>
+<tr><th>name</th><td><input type="text" name="name"></td></tr>
+<tr><th>email</th><td><input type="email" name="email"></td></tr>
+<tr><th>가입</th><td><input type="submit" value="가입"></td></tr>
+</table>
+</form>
+</body>
+</html>
