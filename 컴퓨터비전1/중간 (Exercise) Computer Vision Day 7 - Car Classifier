@@ -1,0 +1,404 @@
+{
+ "cells": [
+  {
+   "cell_type": "markdown",
+   "id": "e64a5e94",
+   "metadata": {},
+   "source": [
+    "## Imports"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "7c1f0a45",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import glob\n",
+    "import os\n",
+    "import numpy as np\n",
+    "import cv2\n",
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.image as mpimg\n",
+    "from skimage.feature import hog\n",
+    "from sklearn.svm import LinearSVC\n",
+    "from sklearn.preprocessing import StandardScaler\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "import pickle"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "503a01a8",
+   "metadata": {},
+   "source": [
+    "## Load Dataset"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cb76d683",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "car_images = []\n",
+    "noncar_images = []"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "691b9f74",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# option 1 (using os)\n",
+    "for root, dirs, files in os.walk('./dataset/vehicles/vehicles/'):\n",
+    "    for file in files:\n",
+    "        if file.endswith('.png'):\n",
+    "            car_images.append(os.path.join(root, file))\n",
+    "            \n",
+    "for root, dirs, files in os.walk('./dataset/non-vehicles/non-vehicles/'):\n",
+    "    for file in files:\n",
+    "        if file.endswith('.png'):\n",
+    "            noncar_images.append(os.path.join(root, file))\n",
+    "print(len(car_images), len(noncar_images))  "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9d0a5aaa",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# option 2 (using glob)\n",
+    "car_images = glob.glob(\"./dataset/vehicles/**/**/*.png\")\n",
+    "noncar_images = glob.glob(\"./dataset/non-vehicles/**/**/*.png\")\n",
+    "print(len(car_images), len(noncar_images))  "
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "6d6c1fd5",
+   "metadata": {},
+   "source": [
+    "## Basic Summary"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "978c4213",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(\"No. of car images : \", len(car_images))\n",
+    "print(\"No. of non-car images : \", len(noncar_images))\n",
+    "print(\"Image shape : \", mpimg.imread(car_images[0]).shape)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "78826583",
+   "metadata": {},
+   "source": [
+    "## Visualize"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "4a5fe32e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "figure, axes = plt.subplots(nrows=8 , ncols=8, figsize=(16, 16))\n",
+    "axes = axes.flatten()\n",
+    "\n",
+    "for i in range(32):\n",
+    "    rand_i = np.random.randint(0, len(car_images))\n",
+    "    image = mpimg.imread(car_images[rand_i])\n",
+    "    axes[i].axis('off')\n",
+    "    axes[i].imshow(image)\n",
+    "    axes[i].set_title(\"car\")\n",
+    "\n",
+    "for i in range(32, 64):\n",
+    "    rand_i = np.random.randint(0, len(noncar_images))\n",
+    "    image = mpimg.imread(noncar_images[rand_i])\n",
+    "    axes[i].axis('off')\n",
+    "    axes[i].imshow(image)\n",
+    "    axes[i].set_title(\"non-car\")"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "948ff064",
+   "metadata": {},
+   "source": [
+    "## Feature Extraction"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "979c2534",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Color and Shape : Raw pixel(resize)\n",
+    "# Color only : Histogram of pixel value\n",
+    "# Shape only : Hisogram of oriened gradients (HOG)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e1b0275a",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def resized_raw_pixel(img, size=(32, 32)):\n",
+    "    # TODO : resize된 이미지를 flatten 해서 return\n",
+    "\n",
+    "    \n",
+    "def color_histogram(img, nbins=32, bins_range=(0, 256)):\n",
+    "    # TODO : 각 채널별 히스토그램을 구한 뒤 연결해서 return\n",
+    "\n",
+    "                                   \n",
+    "def get_hog_feature(img_channel, orientations=9, pixels_per_cell=(8, 8),\n",
+    "                    cells_per_block=(2,2),                      \n",
+    "                    visualize=True, feature_vector=True):\n",
+    "    # TODO : 입력된 채널에 대해 HOG Feature vecture return\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8b44ac24",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def extract_features(file_paths, orientations, pixels_per_cell, cells_per_block, \n",
+    "                     visualize, feature_vector, spatial_size, hist_bins, hist_range):\n",
+    "    features = []\n",
+    "    for file_path in file_paths:\n",
+    "        image = mpimg.imread(file_path)\n",
+    "        feature_image = cv2.cvtColor(image, cv2.COLOR_RGB2YCrCb)\n",
+    "        \n",
+    "        # 1. HOG feaure\n",
+    "\n",
+    "            \n",
+    "        # 2. Resize feature\n",
+    "\n",
+    "        \n",
+    "        # 3. Color histogram\n",
+    "\n",
+    "        \n",
+    "        # 1+2+3\n",
+    "\n",
+    "    \n",
+    "    return features"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "06dfa6de",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# hog parameters\n",
+    "orientations = 9 # ********\n",
+    "pixels_per_cell = (8, 8) \n",
+    "cells_per_block = (2,2) # ********\n",
+    "visualize=False\n",
+    "feature_vector=True\n",
+    "\n",
+    "# resize parameters\n",
+    "spatial_size = (32, 32) # ********\n",
+    "\n",
+    "# histogram parameters\n",
+    "hist_bins = 32 # ********\n",
+    "hist_range = (0, 256)\n",
+    "\n",
+    "car_features = extract_features(car_images, orientations, pixels_per_cell, cells_per_block,\n",
+    "                               visualize, feature_vector,\n",
+    "                               spatial_size, hist_bins, hist_range)\n",
+    "\n",
+    "noncar_features = extract_features(noncar_images, orientations, pixels_per_cell, cells_per_block,\n",
+    "                               visualize, feature_vector,\n",
+    "                               spatial_size, hist_bins, hist_range)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "43f31b6f",
+   "metadata": {},
+   "source": [
+    "#### Visualize HOG Feature (for each channels)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "cf0fcdca",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "idx = 40\n",
+    "car_sample_image = mpimg.imread(car_images[idx])\n",
+    "noncar_sample_image = mpimg.imread(noncar_images[idx])\n",
+    "car_image_ycrcb = cv2.cvtColor(car_sample_image, cv2.COLOR_RGB2YCrCb)\n",
+    "noncar_image_ycrcb = cv2.cvtColor(noncar_sample_image, cv2.COLOR_RGB2YCrCb)\n",
+    "\n",
+    "imgs = []\n",
+    "titles = []\n",
+    "for i in range(3):\n",
+    "    for img_ycrcb, img_type in zip([car_image_ycrcb, noncar_image_ycrcb], [\"Car \", \"Non-Car \"]):\n",
+    "        channel = img_ycrcb[:, :, i]\n",
+    "        imgs.append(channel)\n",
+    "        titles.append(img_type + \"channle %d\"%i)\n",
+    "        hog_feature, hog_image = get_hog_feature(channel, orientations,\n",
+    "                             pixels_per_cell, cells_per_block, visualize=True, feature_vector=False)\n",
+    "        imgs.append(hog_image)\n",
+    "        titles.append(img_type + \"channle %d\"%i + \" HOG\")\n",
+    "        \n",
+    "fig, axes = plt.subplots(3, 4, figsize=(14, 10))\n",
+    "axes = axes.ravel()\n",
+    "\n",
+    "for ax, img, title in zip(axes, imgs, titles):\n",
+    "    ax.imshow(img, cmap=\"gray\")\n",
+    "    ax.set_title(title)\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "2d483da3",
+   "metadata": {},
+   "source": [
+    "## Data Preparation "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "39d31042",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(len(car_features), len(noncar_features))\n",
+    "print(car_features[0].shape, noncar_features[0].shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "9807dcb1",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "X = #### feature vector\n",
+    "y = #### car or not (1 or 0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "b2a5997e",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 표준화\n",
+    "####\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "e41c88dc",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "## 훈련세트와 테스트 세트 분리\n",
+    "####"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "e863de6f",
+   "metadata": {},
+   "source": [
+    "## Classifier"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "0949bce6",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# LinearSVC() \n",
+    "# 모델 훈련\n",
+    "\n",
+    "####"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "id": "94cbac90",
+   "metadata": {},
+   "source": [
+    "## Saving Model"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "1a6daf3f",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "26b73699",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "17b51952",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}
